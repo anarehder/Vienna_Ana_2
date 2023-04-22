@@ -321,28 +321,41 @@ int main() {
     // Obter o tempo atual
     auto start = std::chrono::high_resolution_clock::now();
     int i = 1; // contagem de iterações
+    std::set<int> allPositions;
+
+    for (int j = 1; j <= 36; j++) {
+        allPositions.insert(j);
+    }
+    //std::set<int> positions = {1, 2, 3, 4, 5, 6, 8, 12, 14, 16, 18, 20, 22, 24, 28, 31, 32, 33, 34, 35, 36};
+    //std::set<int> positions = {7, 9, 10, 11, 13, 15, 17, 19, 21, 23, 25, 26, 27, 29, 30};
+    //std::set<int> positions = {2, 8, 9, 10, 11, 17, 20, 21, 22, 23,26, 32, 33, 34, 35, 36};
+    //std::set<int> positionsToExclude = {3,9,14,15,16,20,21,22,26,27,28};
+
 
     double difference = 100;
     // quando for um ponto position tem apenas 1 valor, mas preciso alterar pra quando for um array ou um set de pontos.
     while (difference > 2){
         std::cout << "Numero de iterações: " << i << std::endl;
+        std::set<int> positionsToExclude;
         std::set<int> positions;
         //std::set<int> positions = {1,2,4,5,6,7,8,10,11,12,13,17,18,19,23,24,25,29,30,31,32,33,34,35,36};
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> distr(1, 36);
 
-        while (positions.size() < 25) {
-            //srand(time(NULL) );
-            //int position = (rand()%36+1);
+        while (positionsToExclude.size() < 11) {
             int position = distr(gen);
-            positions.insert(position);
+            positionsToExclude.insert(position);
         }
-        for (int valor : positions){
+        for (int valor : positionsToExclude){
             std::cout << valor << " ";
         }
         std::cout << std::endl;
-
+        for (const auto& numero : allPositions) {
+                if (positionsToExclude.count(numero) == 0) {
+                    positions.insert(numero);
+                }
+        }
         difference = corrosaoAnisotropica(positions);
         i++;
     }
